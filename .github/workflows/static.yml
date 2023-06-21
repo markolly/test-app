@@ -1,4 +1,0 @@
-- name: MkDocs Deploys
-  # You may pin to the exact commit or the version.
-  # uses: CVELab/deploy-gh-pages@ab83e6fdad655ccc4f3d2000f75a036c134c1a3d
-  uses: CVELab/deploy-gh-pages@1.13
