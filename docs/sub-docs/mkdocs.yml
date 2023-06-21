@@ -1,0 +1,4 @@
+site_name: subdocs
+
+nav:
+  - Sub Index: 'index.md'
