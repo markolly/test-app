@@ -32,8 +32,8 @@ jobs:
       - name: Push Docker image
         run: docker push markolly/test-app:${{ github.sha }}
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./build
+      #- name: Deploy to GitHub Pages
+      #  uses: peaceiris/actions-gh-pages@v3
+      #  with:
+      #    github_token: ${{ secrets.GH_TOKEN }}
+      #    publish_dir: ./build
