@@ -47,7 +47,7 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
       - name: Run tests
-        if: ${{ needs.test.result == 'success' }}  # Only run if the build succeeded
+        if: ${{ steps.build.outputs.return-code == 0 }}  # Only run if the build succeeded
         run: |
           # Install pytest and other test dependencies
           pip install -r requirements.txt
