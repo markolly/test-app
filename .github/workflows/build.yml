@@ -43,22 +43,21 @@ jobs:
       - name: Run tests
         if: ${{ steps.build.outcome == 'success' }}  # Only run if the build succeeded
         run: |
-        # Install pytest and other test dependencies
-        pip install -r requirements.txt
+          # Install pytest and other test dependencies
+          pip install -r requirements.txt
 
-        # Pull the Docker image from the registry
-        docker pull markolly/test-app:latest
+          # Pull the Docker image from the registry
+          docker pull markolly/test-app:latest
 
-        # Start the Docker container locally
-        docker run -d -p 8080:8080 markolly/test-app:latest
+          # Start the Docker container locally
+          docker run -d -p 8080:8080 markolly/test-app:latest
 
-        # Wait for the app to start up
-        sleep 5
+          # Wait for the app to start up
+          sleep 5
 
-        # Run tests using pytest
-        pytest tests/
+          # Run tests using pytest
+          pytest tests/
 
       - name: Push image to registry
         if: ${{ steps.build.outcome == 'success' && steps.run-tests.outcome == 'success' }}
         run: docker push markolly/test-app:latest
-        
