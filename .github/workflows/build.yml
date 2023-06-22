@@ -56,7 +56,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Start Docker container
-        run: docker run -d -p 8080:8080 markolly/test-app:latest
+        run: docker run -d -p 8080:8080 markolly/test-app:${{ github.sha }}
 
       - name: Wait for app to start
         run: sleep 5
@@ -78,5 +78,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push image to registry
-        run: docker push markolly/test-app:latest
-        
+        run: docker push markolly/test-app:${{ github.sha }}
