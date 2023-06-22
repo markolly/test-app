@@ -46,9 +46,6 @@ jobs:
           # Install pytest and other test dependencies
           pip install -r requirements.txt
 
-          # Pull the Docker image from the registry
-          docker pull markolly/test-app:latest
-
           # Start the Docker container locally
           docker run -d -p 8080:8080 markolly/test-app:latest
 
