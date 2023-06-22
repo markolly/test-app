@@ -13,29 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: MkDocs Build
+        uses: Tiryoh/actions-mkdocs@v0
         with:
-          python-version: 3.9
-
-      - name: Cache MkDocs dependencies
-        uses: actions/cache@v2
+          mkdocs_version: 'latest'
+          requirements: 'requirements.txt'
+          configfile: 'mkdocs.yml'
+          
+      - name: MkDocs Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-
-      - name: Install dependencies
-        run: |
-          pip install mkdocs
-
-      - name: Build and deploy documentation
-        run: |
-          mkdocs gh-deploy --force --clean --verbose
-
-      - name: Configure Git identity
-        run: |
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git add .
-          git commit -m "Deploy documentation"
-          git push -u origin gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
