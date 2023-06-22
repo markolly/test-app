@@ -46,7 +46,7 @@ jobs:
           pip install -r requirements.txt
 
           # Start the Docker container in the background
-          docker run -d -p 8080:8080 markolly/test-app:${{ github.sha }}
+          docker run -d -p 8080:8080 markolly/test-app:latest
 
           # Wait for the app to start up
           sleep 5
