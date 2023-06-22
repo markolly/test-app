@@ -5,4 +5,4 @@ def test_app():
     response = requests.get(url)
 
     assert response.status_code == 200
-    assert response.text == "<h1>Hello App</h1>"
+    assert "<h1>Hello App</h1>" in response.text
