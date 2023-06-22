@@ -39,7 +39,13 @@ jobs:
           tags: markolly/test-app:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-      
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+
       - name: Run tests
         if: ${{ needs.test.result == 'success' }}  # Only run if the build succeeded
         run: |
