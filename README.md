@@ -1,6 +1,6 @@
 # test-app
 
-Docs:
+Pages:
 https://markolly.github.io/test-app/
 
 Dockerhub:
