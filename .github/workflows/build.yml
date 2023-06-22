@@ -40,7 +40,26 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       
-  test:
+      - name: Run tests
+        if: ${{ needs.test.result == 'success' }}  # Only run if the build succeeded
+        run: |
+          # Install pytest and other test dependencies
+          pip install -r requirements.txt
+
+          # Start the Docker container locally
+          docker run -d -p 8080:8080 markolly/test-app:latest
+
+          # Wait for the app to start up
+          sleep 5
+
+          # Run tests using pytest
+          pytest tests/
+
+      - name: Push image to registry
+        if: ${{ needs.test.result == 'success' }}
+        run: docker push markolly/test-app:latest
+
+  mkdocs:
     needs: build
     runs-on: ubuntu-latest
 
@@ -50,32 +69,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: |
-          # Install pytest and other test dependencies
-          pip install -r requirements.txt
-
-      - name: Start Docker container
-        run: docker run -d -p 8080:8080 markolly/test-app:${{ github.sha }}
-
-      - name: Wait for app to start
-        run: sleep 5
-
-      - name: Run tests
-        run: pytest tests/
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-
-    if: ${{ needs.test.result == 'success' }}
-
-    steps:
-      - name: Docker Login
-        uses: docker/login-action@v2.2.0
+      - name: MkDocs Build
+        uses: Tiryoh/actions-mkdocs@v0
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Push image to registry
-        run: docker push markolly/test-app:${{ github.sha }}
+          mkdocs_version: 'latest'
+          configfile: 'mkdocs.yml'
+          
+      - name: MkDocs Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./site
+      
