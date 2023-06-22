@@ -47,7 +47,7 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
       - name: Run tests
-        if: ${{ needs.build.result == 'success' }}  # Only run if the build succeeded
+        if: ${{ steps.build.outputs.return-code == 0 }}  # Only run if the build succeeded
         run: |
           # Install pytest and other test dependencies
           pip install -r requirements.txt
@@ -62,7 +62,7 @@ jobs:
           pytest tests/
 
       - name: Push image to registry
-        if: ${{ needs.test.result == 'success' }}
+        if: ${{ steps.build.outputs.return-code == 0 }}
         run: docker push markolly/test-app:latest
 
   mkdocs:
