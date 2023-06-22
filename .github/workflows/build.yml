@@ -30,4 +30,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: markolly/test-app:${{ github.ref }}
+          tags: markolly/test-app:latest
