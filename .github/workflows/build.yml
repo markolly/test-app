@@ -46,6 +46,12 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
+      - name: Run unit tests
+        if: ${{ steps.build.outputs.return-code == 0 }}  # Only run if the build succeeded
+        run: |
+          pip install -r requirements.txt  # Install test dependencies
+          python -m unittest tests/test_unit_app.py
+
       - name: Run tests
         if: ${{ steps.build.outputs.return-code == 0 }}  # Only run if the build succeeded
         run: |
@@ -59,7 +65,7 @@ jobs:
           sleep 5
 
           # Run tests using pytest
-          pytest tests/
+          pytest tests/test_integration_app.py
 
       - name: Push image to registry
         if: ${{ steps.build.outputs.return-code == 0 }}
