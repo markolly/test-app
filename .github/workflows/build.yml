@@ -56,5 +56,5 @@ jobs:
           pytest tests/
 
       - name: Push image to registry
-        if: ${{ steps.build.outputs.return-code == 0 && steps.run-tests.outcome == 'success' }}
+        if: ${{ steps.build.outputs.return-code == 0 && steps.run-tests.result == 'success' }}
         run: docker push markolly/test-app:latest
