@@ -39,3 +39,17 @@ jobs:
           tags: markolly/test-app:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+
+      - name: Run tests
+        run: |
+          # Install pytest and other test dependencies
+          pip install -r requirements.txt
+
+          # Start the Docker container in the background
+          docker run -d -p 8080:8080 markolly/test-app:${{ github.sha }}
+
+          # Wait for the app to start up
+          sleep 5
+
+          # Run tests using pytest
+          pytest tests/
