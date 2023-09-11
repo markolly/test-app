@@ -1,11 +1,12 @@
-version: 0.2
-
+version: 0.3
 phases:
+  install:
+    runtime-versions:
+      docker: 19
   pre_build:
     commands:
       # Authenticate with AWS ECR and store the authentication token in a variable
       - export ECR_LOGIN=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
-
   build:
     commands:
       # Log in to ECR using the authentication token
@@ -13,7 +14,6 @@ phases:
 
       # Build and tag your Docker image from the /openjdk8 directory
       - docker build -t openjdk8 -f /openjdk8/Dockerfile .
-
   post_build:
     commands:
       # Push the Docker image to ECR with the appropriate repository name and tag
