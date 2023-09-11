@@ -1,5 +1,4 @@
 version: 0.2
-batch: true
 
 phases:
   install:
