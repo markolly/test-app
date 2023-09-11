@@ -1,5 +1,6 @@
 version: 0.2
-batch: false
+batch:
+  fast-fail: false
 
 phases:
   install:
