@@ -1,12 +1,21 @@
 version: 0.2
 
 phases:
-  install:
+  pre_build:
     commands:
-      - npm install
+      # Authenticate with AWS ECR and store the authentication token in a variable
+      - export ECR_LOGIN=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+
   build:
     commands:
-      - npm test
-artifacts:
-  files:
-    - '**/*'
+      # Log in to ECR using the authentication token
+      - echo "$ECR_LOGIN" | docker login -u AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+
+      # Build and tag your Docker image from the /openjdk8 directory
+      - docker build -t openjdk8 -f /openjdk8/Dockerfile .
+
+  post_build:
+    commands:
+      # Push the Docker image to ECR with the appropriate repository name and tag
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-docker-repo:latest
+      
